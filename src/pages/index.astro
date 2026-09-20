@@ -1,0 +1,241 @@
+---
+const title = "Astro + GitHub Pages";
+const description = "Your sleek, modern, and lightning-fast static website is live.";
+
+const features = [
+  {
+    title: "Zero JS by Default",
+    desc: "Astro builds fast, static HTML sites, shipping zero JavaScript to the client by default.",
+    icon: "🚀"
+  },
+  {
+    title: "Automated Deployments",
+    desc: "Seamlessly integrated with GitHub Actions. Every push to main updates your live site.",
+    icon: "⚙️"
+  },
+  {
+    title: "Scoped Styling",
+    desc: "Write CSS directly in your components. Astro scopes it automatically to prevent clashes.",
+    icon: "💅"
+  }
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+
+    <main class="container">
+      <header class="hero">
+        <div class="badge">Astro 5.0 Ready</div>
+        <h1>Deploy to <span class="text-gradient">GitHub Pages</span></h1>
+        <p class="subtitle">{description}</p>
+        
+        <div class="actions">
+          <a href="https://docs.astro.build" target="_blank" class="btn btn-primary">
+            Explore Documentation
+          </a>
+          <a href="https://github.com" target="_blank" class="btn btn-secondary">
+            View Source Code
+          </a>
+        </div>
+      </header>
+
+      <section class="features">
+        {features.map((feature) => (
+          <div class="card">
+            <div class="card-icon">{feature.icon}</div>
+            <h3>{feature.title}</h3>
+            <p>{feature.desc}</p>
+          </div>
+        ))}
+      </section>
+    </main>
+
+    <footer>
+      <p>Built with 🩵 using Astro. Hosted on GitHub Pages.</p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :root {
+    --bg-color: #0b0f19;
+    --text-color: #e2e8f0;
+    --card-bg: rgba(30, 41, 59, 0.5);
+    --card-border: rgba(51, 65, 85, 0.8);
+    --accent: #38bdf8;
+    --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .bg-glow {
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(11, 15, 25, 0) 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 5rem;
+    animation: fadeIn 1s ease-out;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    background-position: 0%;
+  }
+
+  .subtitle {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto 2.5rem auto;
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px rgba(226, 232, 240, 0.5);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--card-border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--card-bg);
+    border-color: #475569;
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 2rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+  }
+
+  .card p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.95rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 3rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--card-border);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2.5rem; }
+    .actions { flex-direction: column; }
+  }
+</style>
