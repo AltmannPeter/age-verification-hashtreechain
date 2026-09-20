@@ -2,7 +2,7 @@ name: Deploy Astro Site to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # or master, matching your default branch name
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -25,14 +25,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Astro site
         run: npm run build
