@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Replace with your actual GitHub username and repository name
+  // Replace with your GitHub Username and Repository Name
   site: 'https://<your-username>.github.io',
-  base: '/', 
+  base: '/',
+  output: 'static'
 });
