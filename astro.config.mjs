@@ -1,8 +1,7 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  // Replace with your GitHub Username and Repository Name
-  site: 'https://<your-username>.github.io',
-  base: '/',
+  site: 'https://altmannpeter.github.io',
+  base: '/age-verification-hashtreechain',
   output: 'static'
 });
