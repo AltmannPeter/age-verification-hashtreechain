@@ -1,24 +1,5 @@
 ---
-const title = "Astro + GitHub Pages";
-const description = "Your sleek, modern, and lightning-fast static website is live.";
-
-const features = [
-  {
-    title: "Zero JS by Default",
-    desc: "Astro builds fast, static HTML sites, shipping zero JavaScript to the client by default.",
-    icon: "🚀"
-  },
-  {
-    title: "Automated Deployments",
-    desc: "Seamlessly integrated with GitHub Actions. Every push to main updates your live site.",
-    icon: "⚙️"
-  },
-  {
-    title: "Scoped Styling",
-    desc: "Write CSS directly in your components. Astro scopes it automatically to prevent clashes.",
-    icon: "💅"
-  }
-];
+const title = "Age Proof Attestation (HCMK)";
 ---
 
 <html lang="en">
@@ -27,215 +8,694 @@ const features = [
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    <meta name="description" content={description} />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div class="bg-glow"></div>
-
-    <main class="container">
-      <header class="hero">
-        <div class="badge">Astro 5.0 Ready</div>
-        <h1>Deploy to <span class="text-gradient">GitHub Pages</span></h1>
-        <p class="subtitle">{description}</p>
-        
-        <div class="actions">
-          <a href="https://docs.astro.build" target="_blank" class="btn btn-primary">
-            Explore Documentation
-          </a>
-          <a href="https://github.com" target="_blank" class="btn btn-secondary">
-            View Source Code
-          </a>
-        </div>
+    <div class="app-wrapper">
+      <header class="header">
+        <span class="logo">hcmk-age-v1 · issue and prove</span>
+        <button id="btn-new-seed" type="button" class="btn-s accent-btn">New random seed</button>
       </header>
 
-      <section class="features">
-        {features.map((feature) => (
-          <div class="card">
-            <div class="card-icon">{feature.icon}</div>
-            <h3>{feature.title}</h3>
-            <p>{feature.desc}</p>
+      <div class="grid-2col">
+        <!-- Issuer Panel -->
+        <section class="panel border-right">
+          <div class="section-title">
+            <span class="badge">1</span>
+            <h2>Issuer</h2>
           </div>
-        ))}
-      </section>
-    </main>
 
-    <footer>
-      <p>Built with 🩵 using Astro. Hosted on GitHub Pages.</p>
-    </footer>
+          <div class="box margin-top">
+            <div class="k">SEED · 256 BITS · RANDOM</div>
+            <div id="seed-hex" class="m hex-text">—</div>
+          </div>
+
+          <div class="box margin-top-sm">
+            <div class="k">AGE IN DAYS AT ISSUANCE · n</div>
+            <div class="input-row">
+              <input id="input-age" type="number" min="1" max="31" step="1" value="31" />
+              <div class="btn-group">
+                <button type="button" class="btn-s age-preset" data-val="7">7</button>
+                <button type="button" class="btn-s age-preset" data-val="15">15</button>
+                <button type="button" class="btn-s age-preset" data-val="23">23</button>
+                <button type="button" class="btn-s age-preset" data-val="31">31</button>
+              </div>
+            </div>
+            <div id="age-note" class="m text-muted"></div>
+          </div>
+
+          <div class="box margin-top-sm">
+            <div class="k">CHAIN, THEN COMMIT IN REVERSE</div>
+            <div class="code-block">
+              s<sub>0</sub> = seed<br />
+              s<sub>k</sub> = SHA256(s<sub>k−1</sub>)&nbsp;&nbsp;<span class="text-muted">for k = 1 … n</span><br />
+              <span class="accent-text">L<sub>i</sub> = SHA256( s<sub>n−i</sub> ‖ uint32be(i) ‖ "hcmk-chain-v1" )</span>
+            </div>
+            <div class="m text-subtle">the last link lands at leaf 0, the seed at leaf n</div>
+          </div>
+
+          <div class="box-bold margin-top-sm">
+            <div class="k">ISSUED</div>
+            <div class="stack">
+              <div class="kv-line">
+                <span class="m label">signed root →</span>
+                <span id="root-short" class="m hex-text">—</span>
+              </div>
+              <div class="kv-line">
+                <span class="m label accent-text">seed → user</span>
+                <span id="seed-short" class="m hex-text accent-text">—</span>
+              </div>
+              <div class="kv-line">
+                <span class="m label">tree</span>
+                <span id="tree-stats" class="m">—</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- User Panel -->
+        <section class="panel">
+          <div class="section-title">
+            <span class="badge">2</span>
+            <h2>User</h2>
+          </div>
+
+          <div class="box margin-top">
+            <div class="k">REQUESTED AGE · DAYS</div>
+            <div class="input-row">
+              <input id="input-requested" type="number" min="0" max="31" step="1" value="21" />
+              <div class="btn-group">
+                <button type="button" class="btn-s req-preset" data-val="8">8</button>
+                <button type="button" class="btn-s req-preset" data-val="16">16</button>
+                <button type="button" class="btn-s req-preset" data-val="21">21</button>
+                <button type="button" class="btn-s req-preset" data-val="26">26</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="box margin-top-sm">
+            <div class="k">DAYS SINCE ISSUANCE · d</div>
+            <div class="input-row">
+              <input id="input-elapsed" type="number" min="0" max="31" step="1" value="5" />
+            </div>
+          </div>
+
+          <div id="index-panel" class="box-highlight margin-top-sm">
+            <div class="k accent-text">OPEN LEAF i = REQUESTED − d</div>
+            <div id="index-calc" class="calc-header">21 − 5 = 16</div>
+            <div id="index-note" class="m text-subtle">the user was already 16 days old at issuance</div>
+          </div>
+
+          <div id="panel-unopenable" class="box border-dashed margin-top-sm" style="display:none;">
+            <div class="k">NOTHING TO REVEAL</div>
+            <div id="unopenable-msg" class="m text-subtle">Index is outside valid range.</div>
+          </div>
+
+          <div id="panel-openable" class="stack-openable">
+            <div class="box margin-top-sm">
+              <div id="revealed-header" class="k">REVEALED PREIMAGE OF L<sub>16</sub></div>
+              <div class="preimage-grid margin-top-xs">
+                <div class="preimage-row">
+                  <span class="k tag-label">s<sub>n−i</sub> · 32 B</span>
+                  <span id="opened-hex" class="m hex-text">—</span>
+                </div>
+                <div class="preimage-row">
+                  <span class="k tag-label">i · 4 B</span>
+                  <span id="index-hex" class="m hex-text">—</span>
+                </div>
+                <div class="preimage-row">
+                  <span class="k tag-label">TAG · 13 B</span>
+                  <span class="m hex-text">hcmk-chain-v1</span>
+                </div>
+              </div>
+              <div id="steps-fmt" class="m text-subtle margin-top-xs">15 hashes from the seed · opens every leaf below i, none above</div>
+            </div>
+
+            <div class="proof-box margin-top-sm">
+              <div class="k text-translucent">PROOF · 164 BYTES</div>
+              <div id="proof-fmt" class="m proof-code">{ index: 16, value: 0x..., path: [ 5 × 32 B ] }</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Tree Visualization -->
+      <footer class="tree-footer">
+        <div class="tree-header">
+          <div>
+            <div class="k">MERKLE TREE · parent = SHA256(left ‖ right)</div>
+            <div id="tree-range" class="m text-muted">showing indices 0–31</div>
+          </div>
+          <div class="tree-controls">
+            <div class="legend">
+              <span class="legend-item"><span class="swatch accent"></span><span class="m">path to root</span></span>
+              <span class="legend-item"><span class="swatch outline"></span><span class="m">proof siblings</span></span>
+              <span class="legend-item"><span class="swatch dashed"></span><span class="m">padding</span></span>
+            </div>
+            <div class="btn-group">
+              <button id="btn-tree-root" type="button" class="btn-s">root</button>
+              <button id="btn-tree-up" type="button" class="btn-s">up</button>
+              <button id="btn-tree-leaf" type="button" class="btn-s">follow leaf</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="svg-container" class="svg-viewport"></div>
+        <div class="m text-muted margin-top-xs">small example · click any node to zoom into its subtree</div>
+      </footer>
+    </div>
+
+    <script>
+      import * as HCMK from '../utils/hcmk.js';
+
+      class App {
+        constructor() {
+          this.state = { age: 31, requested: 21, elapsed: 5, focus: null };
+          this.seed = HCMK.randomSeed();
+          this.tree = null;
+
+          this.initUI();
+          this.build();
+        }
+
+        initUI() {
+          document.getElementById('btn-new-seed').onclick = () => {
+            this.seed = HCMK.randomSeed();
+            this.build();
+          };
+
+          document.getElementById('input-age').onchange = (e) => {
+            this.state.age = Math.max(1, Math.min(31, Math.round(Number(e.target.value) || 0)));
+            this.build();
+          };
+
+          document.querySelectorAll('.age-preset').forEach(btn => {
+            btn.onclick = () => {
+              this.state.age = Number(btn.dataset.val);
+              document.getElementById('input-age').value = this.state.age;
+              this.build();
+            };
+          });
+
+          document.getElementById('input-requested').onchange = (e) => {
+            this.state.requested = Math.max(0, Math.min(31, Math.round(Number(e.target.value) || 0)));
+            this.state.focus = null;
+            this.render();
+          };
+
+          document.querySelectorAll('.req-preset').forEach(btn => {
+            btn.onclick = () => {
+              this.state.requested = Number(btn.dataset.val);
+              document.getElementById('input-requested').value = this.state.requested;
+              this.state.focus = null;
+              this.render();
+            };
+          });
+
+          document.getElementById('input-elapsed').onchange = (e) => {
+            this.state.elapsed = Math.max(0, Math.min(31, Math.round(Number(e.target.value) || 0)));
+            this.state.focus = null;
+            this.render();
+          };
+
+          document.getElementById('btn-tree-root').onclick = () => {
+            if (this.tree) this.state.focus = { level: this.tree.height, index: 0 };
+            this.render();
+          };
+
+          document.getElementById('btn-tree-up').onclick = () => {
+            const f = this.focusNode();
+            if (f.level < this.tree.height) {
+              this.state.focus = { level: f.level + 1, index: f.index >> 1 };
+              this.render();
+            }
+          };
+
+          document.getElementById('btn-tree-leaf').onclick = () => {
+            this.state.focus = null;
+            this.render();
+          };
+        }
+
+        build() {
+          const n = this.state.age, H = HCMK.H, TAG = HCMK.CHAIN_TAG;
+          const s = new Uint8Array((n + 1) * 32);
+          s.set(this.seed, 0);
+          for (let k = 1; k <= n; k++) s.set(H(HCMK.at(s, k - 1)), k * 32);
+
+          const height = 5, size = 32;
+          const levels = [new Uint8Array(size * 32)];
+          for (let i = 0; i < size; i++) {
+            levels[0].set(i <= n ? H(HCMK.at(s, n - i), HCMK.indexBytes(i), TAG) : HCMK.randomSeed(), i * 32);
+          }
+          for (let l = 1; l <= height; l++) {
+            const prev = levels[l - 1], row = new Uint8Array(prev.length / 2);
+            for (let j = 0; j < row.length / 32; j++) {
+              row.set(H(HCMK.at(prev, 2 * j), HCMK.at(prev, 2 * j + 1)), j * 32);
+            }
+            levels.push(row);
+          }
+          this.tree = { n, s, height, size, levels, root: levels[height].slice(0, 32) };
+          this.render();
+        }
+
+        rawIndex() { return this.state.requested - this.state.elapsed; }
+
+        index() {
+          const T = this.tree, i = this.rawIndex();
+          return T && i >= 0 && i <= T.n ? i : null;
+        }
+
+        focusNode() {
+          if (this.state.focus) return this.state.focus;
+          const level = this.tree.height;
+          return { level, index: Math.floor((this.index() ?? 0) / 2 ** level) };
+        }
+
+        render() {
+          if (!this.tree) return;
+          const T = this.tree, S = this.state;
+          const idx = this.index(), raw = this.rawIndex(), openable = idx !== null;
+
+          document.getElementById('seed-hex').textContent = HCMK.hex(this.seed);
+          document.getElementById('age-note').textContent = `${T.n + 1} chain values · tree is 32 leaves (${32 - T.n - 1} random padding)`;
+          document.getElementById('root-short').textContent = HCMK.short(T.root, 16);
+          document.getElementById('seed-short').textContent = HCMK.short(this.seed, 16);
+          document.getElementById('tree-stats').textContent = `${T.size} leaves · ${T.height} levels`;
+
+          document.getElementById('index-calc').textContent = `${S.requested} − ${S.elapsed} = ${raw}`;
+          const indexPanel = document.getElementById('index-panel');
+          indexPanel.style.background = openable ? 'var(--color-accent-100)' : '#fff';
+
+          const noteEl = document.getElementById('index-note');
+          if (openable) {
+            noteEl.textContent = `the user was already ${idx} days old at issuance`;
+          } else if (raw < 0) {
+            noteEl.textContent = 'negative — request is satisfied by issuance date alone';
+          } else {
+            noteEl.textContent = `above n = ${T.n} — no chain value exists, nothing can be opened`;
+          }
+
+          const unopenablePanel = document.getElementById('panel-unopenable');
+          const openablePanel = document.getElementById('panel-openable');
+
+          if (!openable) {
+            unopenablePanel.style.display = 'block';
+            openablePanel.style.display = 'none';
+            document.getElementById('unopenable-msg').textContent = `index ${raw} is outside 0 … ${T.n}, so there is no leaf preimage.`;
+          } else {
+            unopenablePanel.style.display = 'none';
+            openablePanel.style.display = 'flex';
+            document.getElementById('revealed-header').innerHTML = `REVEALED PREIMAGE OF L<sub>${idx}</sub>`;
+            document.getElementById('opened-hex').textContent = HCMK.short(HCMK.at(T.s, T.n - idx), 16);
+            document.getElementById('index-hex').textContent = HCMK.hex(HCMK.indexBytes(idx));
+            document.getElementById('steps-fmt').textContent = `${T.n - idx} hashes from seed · opens every leaf below ${idx}, none above`;
+            document.getElementById('proof-fmt').textContent = `{ index: ${idx}, value: "${HCMK.short(HCMK.at(T.s, T.n - idx), 8)}", path: [ ${T.height} × 32 B ] }`;
+          }
+
+          this.renderSVG();
+        }
+
+        renderSVG() {
+          const T = this.tree, idx = this.index(), openable = idx !== null;
+          const f = this.focusNode(), depth = f.level;
+          const W = 1200, PAD = 20, INNER = W - PAD * 2, ROW = 78;
+
+          const pathAt = l => openable ? idx >> l : -1;
+          const sibAt = l => openable ? (idx >> l) ^ 1 : -1;
+
+          let svgHtml = `<svg viewBox="0 0 ${W} ${60 + depth * ROW + 20}" width="100%" style="display:block;min-width:900px;font-family:ui-monospace,Menlo,monospace;">`;
+
+          // Draw Edges First
+          for (let row = 1; row <= depth; row++) {
+            const l = f.level - row, count = 2 ** row, start = f.index * count;
+            const cellW = INNER / count;
+            const pCount = 2 ** (row - 1), pCellW = INNER / pCount;
+
+            for (let k = 0; k < count; k++) {
+              const j = start + k;
+              const cx = PAD + (k + 0.5) * cellW, y = 40 + row * ROW;
+              const pcx = PAD + (Math.floor(k / 2) + 0.5) * pCellW;
+              const onPath = pathAt(l) === j;
+              const stroke = onPath ? 'var(--color-accent)' : 'var(--color-neutral-400)';
+              const width = onPath ? 2 : 1;
+
+              svgHtml += `<line x1="${pcx}" y1="${40 + (row - 1) * ROW + 34}" x2="${cx}" y2="${y}" stroke="${stroke}" stroke-width="${width}" />`;
+            }
+          }
+
+          // Draw Nodes
+          for (let row = 0; row <= depth; row++) {
+            const l = f.level - row, count = 2 ** row, start = f.index * count;
+            const cellW = INNER / count, w = Math.min(152, cellW - 6);
+
+            for (let k = 0; k < count; k++) {
+              const j = start + k;
+              const cx = PAD + (k + 0.5) * cellW, y = 40 + row * ROW;
+              const onPath = pathAt(l) === j, isSib = sibAt(l) === j && l < T.height;
+              const padding = (j + 1) * 2 ** l > T.n + 1;
+              const lo = j * 2 ** l, hi = (j + 1) * 2 ** l - 1;
+
+              const fill = onPath ? 'var(--color-accent)' : '#fff';
+              const stroke = onPath || isSib ? 'var(--color-accent)' : padding ? 'var(--color-neutral-400)' : 'var(--color-neutral-500)';
+              const sw = onPath || isSib ? 2 : 1.5;
+              const dash = padding ? '4 3' : 'none';
+              const ink = onPath ? '#fff' : 'var(--color-text)';
+              const ink2 = onPath ? 'rgba(255,255,255,.85)' : 'var(--color-neutral-600)';
+              const label = l === 0 ? 'L' + HCMK.sub(j) : w >= 96 ? `${lo}–${hi}` : `${lo}+`;
+              const digest = HCMK.short(HCMK.at(T.levels[l], j), w > 110 ? 12 : w >= 60 ? 6 : 4);
+
+              svgHtml += `
+                <g class="tree-node" data-level="${l}" data-index="${j}" style="cursor:pointer;">
+                  <rect x="${cx - w / 2}" y="${y}" width="${w}" height="34" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-dasharray="${dash}" />
+                  <text x="${cx}" y="${y + 14}" text-anchor="middle" font-size="10" font-weight="700" fill="${ink}">${label}</text>
+                  <text x="${cx}" y="${y + 27}" text-anchor="middle" font-size="9" fill="${ink2}">${digest}</text>
+                </g>
+              `;
+            }
+          }
+
+          svgHtml += `</svg>`;
+          const container = document.getElementById('svg-container');
+          container.innerHTML = svgHtml;
+
+          container.querySelectorAll('.tree-node').forEach(node => {
+            node.onclick = () => {
+              const l = Number(node.dataset.level);
+              const j = Number(node.dataset.index);
+              if (l > 0) {
+                this.state.focus = { level: l, index: j };
+                this.render();
+              }
+            };
+          });
+
+          const lo = f.index * 2 ** f.level, hi = (f.index + 1) * 2 ** f.level - 1;
+          const inView = openable && idx >= lo && idx <= hi;
+          document.getElementById('tree-range').textContent =
+            `showing indices ${lo}–${hi} · ` +
+            (openable
+              ? (inView ? `leaf ${idx} is in view` : `leaf ${idx} is outside this subtree`)
+              : 'no leaf to open');
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', () => {
+        new App();
+      });
+    </script>
+
+    <style>
+      :root {
+        --color-bg: #f3f2f2;
+        --color-text: #201e1d;
+        --color-accent: #ec3013;
+        --color-accent-100: #fff2ef;
+        --color-accent-700: #ae1800;
+        --color-neutral-100: #f8f4f4;
+        --color-neutral-300: #d7d3d3;
+        --color-neutral-400: #bab6b6;
+        --color-neutral-500: #9b9797;
+        --color-neutral-600: #7d7979;
+        --color-neutral-700: #605d5d;
+        --font-heading: 'Archivo', system-ui, sans-serif;
+        --font-body: 'Archivo', system-ui, sans-serif;
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .app-wrapper {
+        max-width: 1320px;
+        margin: 0 auto;
+        background: #fff;
+        border-left: 2px solid var(--color-text);
+        border-right: 2px solid var(--color-text);
+        min-height: 100vh;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 13px 22px;
+        border-bottom: 2px solid var(--color-text);
+      }
+
+      .logo {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: 14px;
+      }
+
+      .grid-2col {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      }
+
+      .panel {
+        padding: 20px 22px 24px;
+        min-width: 0;
+      }
+
+      .border-right {
+        border-right: 2px solid var(--color-text);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+      }
+
+      .section-title h2 {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        font-size: 22px;
+        margin: 0;
+      }
+
+      .badge {
+        width: 22px;
+        height: 22px;
+        background: var(--color-text);
+        color: #fff;
+        font: 700 12px ui-monospace, Menlo, monospace;
+        text-align: center;
+        line-height: 22px;
+        display: inline-block;
+      }
+
+      .box {
+        border: 1.5px solid var(--color-neutral-400);
+        padding: 12px 14px;
+      }
+
+      .box-bold {
+        border: 2px solid var(--color-text);
+        padding: 12px 14px;
+      }
+
+      .box-highlight {
+        border: 2px solid var(--color-accent);
+        padding: 12px 14px;
+      }
+
+      .border-dashed {
+        border-style: dashed;
+      }
+
+      .proof-box {
+        border: 2px solid var(--color-accent);
+        background: var(--color-accent);
+        color: #fff;
+        padding: 12px 14px;
+      }
+
+      .margin-top { margin-top: 14px; }
+      .margin-top-sm { margin-top: 10px; }
+      .margin-top-xs { margin-top: 6px; }
+
+      .k {
+        font: 700 9px ui-monospace, Menlo, monospace;
+        letter-spacing: .14em;
+        color: var(--color-neutral-600);
+      }
+
+      .m { font: 500 11px/1.5 ui-monospace, Menlo, monospace; }
+
+      .hex-text {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .accent-text { color: var(--color-accent-700); }
+      .text-muted { color: var(--color-neutral-600); }
+      .text-subtle { color: var(--color-neutral-700); }
+      .text-translucent { color: rgba(255, 255, 255, .85); }
+
+      .btn-s {
+        border: 1.5px solid var(--color-neutral-400);
+        background: #fff;
+        color: var(--color-text);
+        font: 600 10.5px ui-monospace, Menlo, monospace;
+        padding: 5px 10px;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .btn-s:hover {
+        border-color: var(--color-accent);
+        background: var(--color-accent-100);
+      }
+
+      .accent-btn { border-color: var(--color-text); }
+
+      input[type=number] {
+        border: 1.5px solid var(--color-neutral-400);
+        background: #fff;
+        color: var(--color-text);
+        font: 600 15px ui-monospace, Menlo, monospace;
+        padding: 7px 9px;
+        width: 130px;
+      }
+
+      .input-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 9px;
+        flex-wrap: wrap;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .code-block {
+        font: 500 12px/2 ui-monospace, Menlo, monospace;
+        margin-top: 8px;
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .stack-openable {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .kv-line {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+      }
+
+      .kv-line .label {
+        width: 104px;
+        flex: 0 0 104px;
+        color: var(--color-neutral-600);
+      }
+
+      .calc-header {
+        font: 800 24px var(--font-heading);
+        letter-spacing: -.03em;
+        margin-top: 6px;
+      }
+
+      .preimage-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .preimage-row {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        border: 1.5px solid var(--color-neutral-400);
+        padding: 6px 9px;
+      }
+
+      .tag-label {
+        font-size: 8.5px;
+        width: 76px;
+        flex: 0 0 76px;
+      }
+
+      .proof-code {
+        margin-top: 7px;
+        line-height: 1.8;
+      }
+
+      .tree-footer {
+        border-top: 2px solid var(--color-text);
+        padding: 18px 22px 26px;
+      }
+
+      .tree-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .tree-controls {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .legend {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      .swatch {
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+      }
+
+      .swatch.accent { background: var(--color-accent); }
+      .swatch.outline { border: 2px solid var(--color-accent); background: #fff; }
+      .swatch.dashed { border: 1.5px dashed var(--color-neutral-400); background: #fff; }
+
+      .svg-viewport {
+        margin-top: 14px;
+        overflow: auto;
+        border: 1.5px solid var(--color-neutral-300);
+        background: var(--color-neutral-100);
+      }
+
+      @media (max-width: 640px) {
+        .border-right { border-right: none; border-bottom: 2px solid var(--color-text); }
+      }
+    </style>
   </body>
 </html>
-
-<style>
-  :root {
-    --bg-color: #0b0f19;
-    --text-color: #e2e8f0;
-    --card-bg: rgba(30, 41, 59, 0.5);
-    --card-border: rgba(51, 65, 85, 0.8);
-    --accent: #38bdf8;
-    --accent-gradient: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-  }
-
-  body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  .bg-glow {
-    position: fixed;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60vw;
-    height: 60vw;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(11, 15, 25, 0) 70%);
-    z-index: -1;
-    pointer-events: none;
-  }
-
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero {
-    text-align: center;
-    margin-bottom: 5rem;
-    animation: fadeIn 1s ease-out;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 0.25rem 1rem;
-    background: rgba(56, 189, 248, 0.1);
-    color: var(--accent);
-    border: 1px solid rgba(56, 189, 248, 0.2);
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 1.5rem;
-  }
-
-  h1 {
-    font-size: 4rem;
-    font-weight: 800;
-    line-height: 1.1;
-    margin: 0 0 1.5rem 0;
-    letter-spacing: -0.02em;
-  }
-
-  .text-gradient {
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 200%;
-    background-position: 0%;
-  }
-
-  .subtitle {
-    font-size: 1.25rem;
-    color: #94a3b8;
-    max-width: 600px;
-    margin: 0 auto 2.5rem auto;
-  }
-
-  .actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-  }
-
-  .btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
-  }
-
-  .btn-primary {
-    background-color: var(--text-color);
-    color: var(--bg-color);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -10px rgba(226, 232, 240, 0.5);
-  }
-
-  .btn-secondary {
-    background-color: transparent;
-    color: var(--text-color);
-    border: 1px solid var(--card-border);
-  }
-
-  .btn-secondary:hover {
-    background-color: var(--card-bg);
-    border-color: #475569;
-  }
-
-  .features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    width: 100%;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    padding: 2rem;
-    border-radius: 16px;
-    backdrop-filter: blur(10px);
-    transition: transform 0.3s ease, border-color 0.3s ease;
-  }
-
-  .card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(56, 189, 248, 0.4);
-  }
-
-  .card-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .card h3 {
-    margin: 0 0 0.75rem 0;
-    font-size: 1.25rem;
-    color: #f8fafc;
-  }
-
-  .card p {
-    margin: 0;
-    color: #94a3b8;
-    font-size: 0.95rem;
-  }
-
-  footer {
-    text-align: center;
-    padding: 3rem;
-    color: #64748b;
-    font-size: 0.875rem;
-    border-top: 1px solid var(--card-border);
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 640px) {
-    h1 { font-size: 2.5rem; }
-    .actions { flex-direction: column; }
-  }
-</style>
